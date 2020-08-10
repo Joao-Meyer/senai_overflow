@@ -6,10 +6,16 @@ const express = require("express");
 const routes = express.Router();
 
 const alunoController = require("./controllers/aluno");
+const postagemController = require("./controllers/postagem");
 
-// Rota de criação de usuário
+// Rotas de usuário
 routes.get("/alunos", alunoController.list);
 routes.get("/alunos/:id", alunoController.searchById);
 routes.post("/alunos", alunoController.store);
+
+// Rotas de postagem
+// routes.get("/alunos", alunoController.list);
+routes.post("/postagens", postagemController.store);
+routes.delete("/postagens/:id", postagemController.delete);
 
 module.exports = routes;

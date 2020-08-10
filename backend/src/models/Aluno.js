@@ -14,6 +14,12 @@ class Aluno extends Model {
             }
         );
     }
+
+    static associate( models ){
+        this.hasMany( models.postagens, {
+            foreignKey: "created_aluno_id"
+        } );
+    }
 }
 
 module.exports = Aluno;
