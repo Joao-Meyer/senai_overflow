@@ -14,7 +14,6 @@ routes.get("/alunos/:id", alunoController.searchById);
 routes.post("/alunos", alunoController.store);
 
 // Rotas de postagem
-// routes.get("/alunos", alunoController.list);
 routes.post("/postagens", postagemController.store);
 routes.delete("/postagens/:id", postagemController.delete);
 
