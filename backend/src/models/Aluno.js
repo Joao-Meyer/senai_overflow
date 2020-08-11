@@ -16,9 +16,10 @@ class Aluno extends Model {
     }
 
     static associate( models ){
-        this.hasMany( models.postagens, {
+        this.hasMany( models.Postagem, {
             foreignKey: "created_aluno_id"
         } );
+        this.hasMany( models.Comentario );
     }
 }
 

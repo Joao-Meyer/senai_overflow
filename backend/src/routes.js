@@ -7,14 +7,19 @@ const routes = express.Router();
 
 const alunoController = require("./controllers/aluno");
 const postagemController = require("./controllers/postagem");
+const comentarioController = require("./controllers/comentario");
 
-// Rotas de usuário
+// Rotas de aluno
 routes.get("/alunos", alunoController.list);
 routes.get("/alunos/:id", alunoController.searchById);
 routes.post("/alunos", alunoController.store);
 
 // Rotas de postagem
+routes.get("/postagens", postagemController.index);
 routes.post("/postagens", postagemController.store);
 routes.delete("/postagens/:id", postagemController.delete);
+
+// Rotas de comentário
+routes.post("/postagens/:postId/comentarios", comentarioController.store);
 
 module.exports = routes;
