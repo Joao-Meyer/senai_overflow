@@ -43,7 +43,7 @@ module.exports = {
 
         // Procura o post pelo id
         let postagem = await Postagem.findByPk( id );
-
+        
         // Se a postagem não existir retorna not found
         if(!postagem){
             return res.status(404).send({erro: "Postagem não encontrada."})
