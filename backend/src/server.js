@@ -1,6 +1,8 @@
-const app = require('./app.js')
+const app = require('./app.js');
+
+const porta = 3333;
 
 // Sobe a aplicação em um servidor(conteiner)
-app.listen(3000, () => {
-    console.log('Servidor rodando na porta 3000.');
+app.listen(porta, () => {
+    console.log(`Servidor rodando na porta ${porta}.`);
 });
