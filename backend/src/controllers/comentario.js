@@ -8,8 +8,7 @@ module.exports = {
     // Implementar a inserção de comentário
     async store(req, res){
         // Recuperar o id do usuário
-        const token = req.headers.authorization;
-        const [Bearer, aluno_id] = token.split(" ");
+        const aluno_id = req.alunoId;
 
         // Recuperar o id da postagem
         const {postId} = req.params;

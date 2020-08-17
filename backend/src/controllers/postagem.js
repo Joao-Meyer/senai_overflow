@@ -34,8 +34,7 @@ module.exports = {
 
     async delete(req, res){
         // Pegando o id do aluno que está logado
-        const token = req.headers.authorization;
-        const [Bearer, created_aluno_id] = token.split(" ");
+        const created_aluno_id = req.alunoId;
 
         // Pegando o id do post apagar
         const {id} = req.params;
