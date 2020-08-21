@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Container, ImageCropped, Form, Titulo, Subtitulo, InputGroup, Button, HiddenForm } from './styles';
+import { Container, ImageCropped, Form, Titulo, Subtitulo, InputGroup, Button } from './styles';
 
 import foto from '../../assets/foto.jpg';
 import { api } from "../../services/api";
@@ -123,7 +123,7 @@ const FormRegistrar = (props) => {
             </InputGroup>
 
             <InputGroup>
-                <label>Nomme</label>
+                <label>Nome</label>
 
                 <input
                     type="text"
