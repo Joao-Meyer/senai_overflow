@@ -5,6 +5,8 @@ import { Container, ImageCropped, Form, Titulo, Subtitulo, InputGroup, Button } 
 import foto from '../../assets/foto.jpg';
 import { api } from "../../services/api";
 
+// import Alerts from "../../components/alerts";
+
 const FormLogin = (props) => {
     const [ alunoLogin, setAlunoLogin ] = useState({
         email: "",
