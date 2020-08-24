@@ -1,12 +1,16 @@
 import React from 'react';
 
-import { FiGithub } from 'react-icons/fi';
+import { FiGithub, FiLogOut } from 'react-icons/fi';
 import fotoPerfil from "../../assets/foto_perfil.png";
 import imgPost from "../../assets/post-exemplo.jpg";
 
 import './styles.css';
+import { signOut } from '../../services/security';
+import { useHistory } from 'react-router-dom';
 
 function home() {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const history = useHistory();
   return (
     <div className="container">
         <header className="header">
@@ -18,7 +22,14 @@ function home() {
                 <input type="search" placeholder="Pesquiaar uma dúvida" id="" name=""/>    
             </div>
 
-            <div>Direita</div>
+            <div>
+                <button className="btnSair" onClick={ () => {
+                    signOut();
+                    history.replace("/");
+                } }>
+                    Sair <FiLogOut />
+                </button>
+            </div>
         </header>
 
         <div className="content">

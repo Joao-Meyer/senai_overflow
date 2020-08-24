@@ -4,10 +4,14 @@ import { Container, ImageCropped, Form, Titulo, Subtitulo, InputGroup, Button } 
 
 import foto from '../../assets/foto.jpg';
 import { api } from "../../services/api";
+import { signIn } from "../../services/security";
+import { useHistory } from "react-router-dom";
 
 // import Alerts from "../../components/alerts";
 
 const FormLogin = (props) => {
+    const history = useHistory();
+
     const [ alunoLogin, setAlunoLogin ] = useState({
         email: "",
         senha: "",
@@ -21,9 +25,10 @@ const FormLogin = (props) => {
 
             if(retorno.status === 201){
                 // Vai logar na aplicação
-                // Redirecionar para a tela home
+                signIn( retorno.data );
 
-                window.alert("Logado com sucesso!");
+                // Redirecionar para a tela home
+                return history.push("/home");
             }
         } catch (erro) {
             if(erro.response){
