@@ -7,6 +7,8 @@ export const GlobalStyle = createGlobalStyle`
         --white: #d9d9d9;
         --gray: #7a7a7a;
         --red: #aa0000;
+        --alertErro: #aa0000DD;
+        --alertSucesso: #00aa00DD;
     }
 
     * {

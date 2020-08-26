@@ -4,6 +4,19 @@ import Login from './pages/login';
 import Home from './pages/home';
 import { issSignedIn } from './services/security';
 
+// const PrivateRoute = ({ children, location, ...rest }) => {
+//     return isSignedIn() ? (
+//       <Route {...rest}>{children}</Route>
+//     ) : (
+//       <Redirect
+//         to={{
+//           pathname: "/",
+//           state: { from: location },
+//         }}
+//       />
+//     );
+// };
+
 const PrivateRoute = ({ children, ...rest }) => {
     return (
         <Route {...rest}
