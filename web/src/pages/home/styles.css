@@ -96,11 +96,19 @@
     border-radius: 50px;
 }
 
-.profile a{
+.profile label{
     margin-top: 5px;
     font-size: 15px;
     text-decoration: none;
     color: var(--gray);
+
+    letter-spacing: 0;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.profile label:hover{
+    color: var(--red);
 }
 
 .profile strong {
@@ -164,7 +172,7 @@
     margin-left: 10px;
 }
 
-.card-post body {
+.card-post section {
     margin-top: 10px;
     background-color: var(--secundary);
 
@@ -172,17 +180,17 @@
     flex-direction: column;
 }
 
-.card-post body strong {
+.card-post section strong {
     font-size: 18px;
     font-weight: 500;
 }
 
-.card-post body p {
+.card-post section p {
     margin-top: 5px;
     font-size: 15px;
 }
 
-.card-post body img {
+.card-post section img {
     margin-top: 10px;
     max-height: 100%;
 
@@ -233,4 +241,15 @@
     margin-left: 10px;
 
     font-size: 14px;
+}
+
+.card-post footer .novo-comentario {
+    width: 100%;
+    margin-top: 5px;
+    display: flex;
+}
+
+.card-post footer .novo-comentario textarea{
+    flex: 1;
+    height: 30px;
 }

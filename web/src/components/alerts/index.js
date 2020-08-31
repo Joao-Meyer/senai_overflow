@@ -1,18 +1,35 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 
 import { Alert } from './styles';
 
 function Alerts( props ) {
-    const { mensagem, tipo } = props;
+    const alertEl = useRef();
+    const { mensagem, tipo, setMensagem } = props;
 
-    return mensagem ?
-    (
-       <Alert tipo={tipo}>
+    useEffect(() => {
+        if(mensagem){
+            alertEl.current.style.width = "300px";
+        }
+        else{
+            alertEl.current.style.width = "0px";
+        }
+    }, [mensagem]);
+
+    return (
+       <Alert ref={alertEl} tipo={tipo}>
             <h1>{mensagem}</h1>       
+
+            {mensagem && (
+                <p
+                    onClick={() => {
+                        setMensagem(undefined);
+                    }}
+                >
+                    &times
+                </p>
+            )}
        </Alert>
     ) 
-    : 
-    null;
 }
 
 export default Alerts;

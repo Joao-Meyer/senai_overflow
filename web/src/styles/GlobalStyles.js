@@ -19,6 +19,7 @@ export const GlobalStyle = createGlobalStyle`
     body {
         font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
         background-color: var(--primary);
+        overflow-x: hidden;
     }
 
     input {
@@ -33,6 +34,20 @@ export const GlobalStyle = createGlobalStyle`
         transition: background-color 0.2s;
     }
 
+    textarea {
+        color: var(--white);
+        background-color: var(--secundary);
+        font-size: 16px;
+        border: 1px solid var(--white);
+        padding: 10px;
+        font-weight: bold;
+        height: 30px;
+
+        transition: background-color 0.2s;
+
+        resize: none;
+    }
+
     label {
         color: var(--white);
         letter-spacing: 2px;
@@ -40,7 +55,7 @@ export const GlobalStyle = createGlobalStyle`
         font-size: 20px;
     }
 
-    input, button {
+    input, button, textarea {
         :hover {
             background-color: var(--red);
         }

@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { FiGithub, FiLogOut } from 'react-icons/fi';
 import fotoPerfil from "../../assets/foto_perfil.png";
@@ -14,6 +14,7 @@ import { api } from '../../services/api';
 const CardPost = ({ post }) => {
     const [ mostrarComentarios, setMostrarComentarios ] = useState(false);
     const [ comentarios, setComentarios ] = useState([]);
+    const [ novoComentario, setNovoComentario ] = useState("");
 
     const carregarComentarios = async () => {
         try {
@@ -29,6 +30,32 @@ const CardPost = ({ post }) => {
         }
     }
 
+    const criarComentario = async (e) =>{
+        e.preventDefault();
+
+        try {
+            // Chamada para a api, criando um novo comentário
+            const retorno = await api.post(`/postagens/${post.id}/comentarios`, {
+                descricao: novoComentario
+            });
+
+            // Recebe o retorno da api com o comentario criado
+            let comentario = retorno.data;
+
+            // Coloca os dados do aluno logado no comentario criado
+            comentario.Aluno = getAluno();
+
+            // Atualiza a lista inserindo o novo comentário
+            // Seta a lista com o que ele já tinha, e com o novo comentário
+            setComentarios([...comentarios, comentario]);
+
+            // Limpa o campo novo comentário
+            setNovoComentario("");
+        } catch (erro) {
+            console.log(erro)
+        }
+    }
+
     return (
         <div className="card-post">
             <header>
@@ -40,7 +67,7 @@ const CardPost = ({ post }) => {
                 {post.gists &&  (<FiGithub className="icon" size={20}/>)}
             </header>
 
-            <body>
+            <section>
                 <strong>
                     {post.titulo}
                 </strong>
@@ -50,7 +77,7 @@ const CardPost = ({ post }) => {
                 </p>
 
                 <img src={imgPost} alt="Imagem do post"/>
-            </body>
+            </section>
 
             <footer>
                 <h1 onClick={carregarComentarios}>
@@ -62,7 +89,7 @@ const CardPost = ({ post }) => {
                             {comentarios.length === 0 && (<p>Seja o primeiro a comentar!</p>)}
 
                             {comentarios.map(( comentario ) => (
-                                <section>
+                                <section key={comentario.id}>
                                     <header>
                                         <img src={fotoPerfil} alt="Foto de perfil"/>
 
@@ -73,6 +100,16 @@ const CardPost = ({ post }) => {
                                     <p>{comentario.descricao}</p>
                                 </section>
                             ))}
+
+                            <form className="novo-comentario" onSubmit={criarComentario}>
+                                <textarea placeholder="Comente essa dúvida"
+                                            required
+                                            value={novoComentario}
+                                            onChange={(e) => {
+                                               setNovoComentario(e.target.value);
+                                            }}></textarea>
+                                <button>Enviar</button>
+                            </form>
                         </>
                     )
                 }
@@ -133,7 +170,7 @@ function Home() {
             <section className="profile">
                 <img src={fotoPerfil} alt="Foto de perfil"/>
 
-                <a href="#">Editar foto</a>
+                <label >Editar foto</label>
 
                 <strong>Nome:</strong>
                 <p>{alunoSessao.nome}</p>
@@ -144,7 +181,7 @@ function Home() {
 
             <section className="feed">
                 {postagens.map((post) => (
-                    <CardPost post={post}/>
+                    <CardPost key={post.id} post={post}/>
                 ))}
             </section>
         </div>
