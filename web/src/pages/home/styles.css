@@ -253,3 +253,65 @@
     flex: 1;
     height: 30px;
 }
+
+.nova-postagem {
+    width: 600px;
+    height: fit-content;
+    padding: 10px;
+
+    border-color: var(--primary);
+    border-radius: 6px;
+
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+}
+
+.nova-postagem span {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-right: 10px;
+
+    font-size: 30px;
+    color: var(--white);
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.nova-postagem span:hover {
+    color: var(--red);
+}
+
+.nova-postagem h1 {
+    color: var(--white);
+    font-weight: 500;
+    text-align: center;
+}
+
+.nova-postagem label{
+    margin-top: 10px;
+}
+
+.nova-postagem label em{
+    font-size: 14px;
+    font-style: normal;
+}
+
+.nova-postagem textarea{
+    height: 100px;
+}
+
+.nova-postagem input[type="file"]{
+    display: none;
+}
+
+.actions {
+    padding-top: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

@@ -10,6 +10,7 @@ import './styles.css';
 import { signOut, getAluno } from '../../services/security';
 import { useHistory } from 'react-router-dom';
 import { api } from '../../services/api';
+import Popup from '../../components/popup';
 
 const CardPost = ({ post }) => {
     const [ mostrarComentarios, setMostrarComentarios ] = useState(false);
@@ -118,11 +119,72 @@ const CardPost = ({ post }) => {
     );
 }
 
+const NovaPostagem =  ({ setmostrarNovaPostagem }) => {
+    const [ novaPostagem, setNovaPostagem ] = useState({
+        titulo: "",
+        descricao: "",
+        gists: "",
+    })
+
+    const handlerInput = (e) => {
+        setNovaPostagem({...novaPostagem, [e.target.id]: e.target.value});
+    }
+
+    const fechar = () => {
+        const { titulo, descricao, gists } = novaPostagem;
+
+        if(
+            ( titulo || descricao || gists ) &&
+            !( window.confirm("Tem certeza que deseja abandonar a dúvida?"))
+        )   {
+                return;
+        }
+        setmostrarNovaPostagem(false);
+    }
+
+    return (
+        <Popup>
+            <form className="nova-postagem">
+                <span onClick={fechar}>&times;</span>
+
+                <h1>Publique sua dúvida</h1>
+
+                <label>Titulo</label>
+                <input
+                    type="text"
+                    id="titulo"
+                    placeholder="Sobre o que é sua dúvida"
+                    onChange={handlerInput}/>
+
+                <label>Descrição</label>
+                <textarea
+                    id="descricao"
+                    placeholder="Descreva em detalhes o que te aflinge"
+                    onChange={handlerInput}/>
+
+                <label>Gist <em>(Opcional)</em></label>
+                <input
+                    type="text"
+                    id="gists"
+                    placeholder="https://gist.github.com/user/123"
+                    onChange={handlerInput}/>
+
+                <label>Imagem <em>(Opcional)</em></label>
+                <input type="file"/>
+                <img alt="preview"/>
+
+                <button>Enviar</button>
+            </form>
+        </Popup>
+    )
+}
+
 function Home() {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const history = useHistory();
     const [ mensagem, setMensagem ] = useState("");
     const [ postagens, setPostagens ] = useState([]);
+    const [ mostrarNovaPostagem, setmostrarNovaPostagem ] = useState(false);
 
     useEffect( () => {
         const carregarPostagens = async () => {
@@ -147,6 +209,9 @@ function Home() {
   return (
     <div className="container">
         <Alerts mensagem={mensagem} setMensagem={setMensagem} tipo="erro"/>
+
+        {mostrarNovaPostagem && (<NovaPostagem setmostrarNovaPostagem={setmostrarNovaPostagem}/>)}
+
         <header className="header">
             <div>
                 <p>Senai Overflow</p>
@@ -183,6 +248,12 @@ function Home() {
                 {postagens.map((post) => (
                     <CardPost key={post.id} post={post}/>
                 ))}
+            </section>
+
+            <section className="actions">
+                    <button onClick={() => {
+                        setmostrarNovaPostagem(true);
+                    }}>Nova Postagem</button>
             </section>
         </div>
     </div>
