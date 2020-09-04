@@ -2,10 +2,19 @@
 
 const express = require("express");
 
+const multer = require("multer");
+
+const Multer = multer({
+    storage: multer.memoryStorage(),
+    limits: 1024 * 1024,
+
+})
+
 // Criando o roteirizador
 const routes = express.Router();
 
 const autorizacaoMid = require("./middlewares/autorizacao");
+const uploadImage = require("./services/firebase");
 
 const alunoController = require("./controllers/aluno");
 const postagemController = require("./controllers/postagem");
@@ -29,7 +38,7 @@ routes.get("/alunos/:id", alunoController.searchById);
 
 // Rotas de postagem
 routes.get("/postagens", postagemController.index);
-routes.post("/postagens", postagemController.store);
+routes.post("/postagens", Multer.single("imagem"), uploadImage, postagemController.store);
 routes.delete("/postagens/:id", postagemController.delete);
 
 // Rotas de comentário

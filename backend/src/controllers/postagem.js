@@ -8,7 +8,9 @@ module.exports = {
         // Pegar o aluno ID
         const created_aluno_id = req.alunoId;
 
-        const { titulo, descricao, imagem, gists } = req.body;
+        const { firebaseUrl } = req.file ? req.file : "";
+
+        const { titulo, descricao, gists } = req.body;
 
         try{        
             const aluno = await Aluno.findByPk(created_aluno_id);
@@ -18,7 +20,10 @@ module.exports = {
             }
 
             let postagem = await aluno.createPostagem({
-                titulo, descricao, imagem, gists
+                titulo,
+                descricao,
+                imagem: firebaseUrl,
+                gists
             });
 
            res.status(201).send(postagem);
