@@ -188,11 +188,15 @@
 .card-post section p {
     margin-top: 5px;
     font-size: 15px;
+    padding: 10px 5px;
+
+    background-color: var(--primary);
+    border-left: 2px solid var(--white);
 }
 
 .card-post section img {
     margin-top: 10px;
-    max-height: 100%;
+    max-width: 100%;
 
     align-self: center;
 }
@@ -260,6 +264,7 @@
     padding: 10px;
 
     border-color: var(--primary);
+    background-color: var(--primary);
     border-radius: 6px;
 
     display: flex;
@@ -295,6 +300,14 @@
     margin-top: 10px;
 }
 
+.nova-postagem label[for="inputImagem"] {
+    cursor: pointer;
+}
+
+.nova-postagem label[for="inputImagem"]:hover  {
+    color: var(--red);
+}
+
 .nova-postagem label em{
     font-size: 14px;
     font-style: normal;
@@ -305,6 +318,13 @@
 }
 
 .nova-postagem input[type="file"]{
+    display: none;
+}
+
+.nova-postagem img {
+    width: 100px;
+    margin-bottom: 10px;
+
     display: none;
 }
 

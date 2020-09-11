@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { FiGithub, FiLogOut } from 'react-icons/fi';
 import fotoPerfil from "../../assets/foto_perfil.png";
@@ -11,6 +11,7 @@ import { signOut, getAluno } from '../../services/security';
 import { useHistory } from 'react-router-dom';
 import { api } from '../../services/api';
 import Popup from '../../components/popup';
+import moment from 'moment';
 
 const CardPost = ({ post }) => {
     const [ mostrarComentarios, setMostrarComentarios ] = useState(false);
@@ -55,15 +56,17 @@ const CardPost = ({ post }) => {
         } catch (erro) {
             console.log(erro)
         }
-    }
+    };
+
+    const alunoSessao = getAluno();
 
     return (
         <div className="card-post">
             <header>
                 <img src={fotoPerfil} alt="Foto de perfil"/>
 
-            <strong>{post.Aluno.nome}</strong>
-                <p> {post.create_at}</p>
+            <strong>por {post.Aluno.id === alunoSessao.alunoId ? "você" : post.Aluno.nome}</strong>
+                <p> {moment( post.create_at ).locale("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")}</p>
                 {/* Renderização condicional. Só mostra o ícone se o "gists" for verdadeiro.*/}
                 {post.gists &&  (<FiGithub className="icon" size={20}/>)}
             </header>
@@ -77,7 +80,7 @@ const CardPost = ({ post }) => {
                     {post.descricao}
                 </p>
 
-                <img src={imgPost} alt="Imagem do post"/>
+                {post.imagem && <img src={post.imagem} alt="Imagem do post"/>}
             </section>
 
             <footer>
@@ -119,16 +122,72 @@ const CardPost = ({ post }) => {
     );
 }
 
-const NovaPostagem =  ({ setmostrarNovaPostagem }) => {
+const NovaPostagem =  ({ carregarPostagens, setmostrarNovaPostagem, setMensagem }) => {
     const [ novaPostagem, setNovaPostagem ] = useState({
         titulo: "",
         descricao: "",
         gists: "",
     })
 
+    const enviar = async (e) => {
+        e.preventDefault();
+
+        setMensagem("Enviando");
+
+        const dados = new FormData();
+
+        dados.append("titulo", novaPostagem.titulo);
+        dados.append("descricao", novaPostagem.descricao);
+        dados.append("gists", novaPostagem.gists);
+        dados.append("imagem", imagem);
+
+        try {
+            await api.post("/postagens", dados, {
+                headers: {
+                    "Content-type" : `multipart/form-data`,
+                },
+            });
+
+            carregarPostagens();
+            
+            setmostrarNovaPostagem(false);
+
+            setMensagem("Feito");
+            
+            setTimeout(() => {
+                setMensagem("")
+            }, 3000);
+        } catch (error) {
+            console.log(error);
+
+            setMensagem("Erro ao enviar, consulte o administrador de sistema.");
+
+            setTimeout(() => {
+                setMensagem("")
+            }, 3000);
+        }
+    }
+
     const handlerInput = (e) => {
         setNovaPostagem({...novaPostagem, [e.target.id]: e.target.value});
     }
+
+    const handlerImagem = (e) => {
+        if(e.target.files[0]){
+            imgRef.current.src = URL.createObjectURL(e.target.files[0]);
+            imgRef.current.style.display = "block";
+        }
+        else {
+            imgRef.current.src = "";
+            imgRef.current.style.display = "none";
+        }
+
+        setImagem(e.target.files[0]);
+    }
+
+    const imgRef = useRef();
+
+    const [ imagem, setImagem ] = useState(null);
 
     const fechar = () => {
         const { titulo, descricao, gists } = novaPostagem;
@@ -144,7 +203,7 @@ const NovaPostagem =  ({ setmostrarNovaPostagem }) => {
 
     return (
         <Popup>
-            <form className="nova-postagem">
+            <form className="nova-postagem" onSubmit={enviar}>
                 <span onClick={fechar}>&times;</span>
 
                 <h1>Publique sua dúvida</h1>
@@ -169,9 +228,10 @@ const NovaPostagem =  ({ setmostrarNovaPostagem }) => {
                     placeholder="https://gist.github.com/user/123"
                     onChange={handlerInput}/>
 
-                <label>Imagem <em>(Opcional)</em></label>
-                <input type="file"/>
-                <img alt="preview"/>
+                <label htmlFor="inputImagem">Imagem <em>(Opcional)</em></label>
+
+                <input id="inputImagem" type="file" onChange={handlerImagem}/>
+                <img alt="preview" ref={imgRef}/>
 
                 <button>Enviar</button>
             </form>
@@ -187,22 +247,22 @@ function Home() {
     const [ mostrarNovaPostagem, setmostrarNovaPostagem ] = useState(false);
 
     useEffect( () => {
-        const carregarPostagens = async () => {
-            try {
-                const retorno = await api.get("/postagens");
-
-                setPostagens(retorno.data);
-            } catch (erro) {
-                if(erro.response) {
-                    return setMensagem(erro.response.data.erro)
-                }
-
-                setMensagem("Ops, algo deu errado, tente novamente.");
-            }
-        };
-
         carregarPostagens();
     }, []);
+
+    const carregarPostagens = async () => {
+        try {
+            const retorno = await api.get("/postagens");
+
+            setPostagens(retorno.data);
+        } catch (erro) {
+            if(erro.response) {
+                return setMensagem(erro.response.data.erro)
+            }
+
+            setMensagem("Ops, algo deu errado, tente novamente.");
+        }
+    };
 
     const alunoSessao = getAluno();
 
@@ -210,7 +270,12 @@ function Home() {
     <div className="container">
         <Alerts mensagem={mensagem} setMensagem={setMensagem} tipo="erro"/>
 
-        {mostrarNovaPostagem && (<NovaPostagem setmostrarNovaPostagem={setmostrarNovaPostagem}/>)}
+        {mostrarNovaPostagem && (
+        <NovaPostagem   
+            carregarPostagens= {carregarPostagens}
+            setmostrarNovaPostagem={setmostrarNovaPostagem}
+            setMensagem={setMensagem}
+        />)}
 
         <header className="header">
             <div>

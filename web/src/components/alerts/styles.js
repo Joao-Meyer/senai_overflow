@@ -9,7 +9,7 @@ export const Alert = styled.div`
   height: 60px;
   margin: 10px;
 
-  z-index: 9;
+  z-index: 19;
 
   transition: width 0.2s;
 
